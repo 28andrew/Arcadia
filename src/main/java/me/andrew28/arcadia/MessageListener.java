@@ -58,6 +58,9 @@ public class MessageListener extends ListenerAdapter{
                     if (!botCommand.isCaseSensitive()){
                         regex = "(?i)" + regex;
                     }
+                    if (botCommand.usesPrefix()){
+                        regex = regex.replace(Arcadia.PREFIX, Arcadia.PREFIX.replace("\\","\\\\"));
+                    }
                     if(message.matches(regex)){
                         handle(botCommand, event);
                     }
@@ -66,7 +69,7 @@ public class MessageListener extends ListenerAdapter{
         }
     }
     public void handle(BotCommand botCommand, MessageReceivedEvent event){
-        Arcadia.log("User " + event.getAuthor().getName() + " has activated " + botCommand.getClass().getName());
+        Arcadia.log("User " + event.getAuthor().getName() + " has activated " + botCommand.getCommandClass().getClass().getSimpleName() + " on channel " + event.getChannel().getName() + " on server " + event.getMessage().getGuild().getName());
         botCommand.getCommandClass().handle(event.getAuthor(), event.getMessage(), event.getChannelType(), event);
     }
 }
