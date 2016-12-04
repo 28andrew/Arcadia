@@ -40,7 +40,7 @@ public class Arcadia {
         getInstance().setCensoredToken(getInstance().censorToken(getInstance().getToken()));
         System.out.println("Arcadia Bot");
         System.out.println("Token: " + getInstance().getCensoredToken());
-
+        System.out.println("Loading JDA..");
         try {
             getInstance().setJdaInstance(
                     new JDABuilder(AccountType.BOT)
@@ -57,6 +57,8 @@ public class Arcadia {
             e.printStackTrace();
         }
 
+        new MessageListener(getInstance().getJdaInstance());
+        System.out.println("Message Listener loaded");
         //Start console when everything else is done
         getInstance().setConsole(System.console());
         new Thread(() -> {
