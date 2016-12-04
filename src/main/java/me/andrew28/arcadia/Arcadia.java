@@ -59,13 +59,10 @@ public class Arcadia {
 
         //Start console when everything else is done
         getInstance().setConsole(System.console());
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ConsoleProcessor consoleProcessor = new ConsoleProcessor();
-                while(true){
-                    consoleProcessor.process(getInstance().getConsole().readLine("CMD: "));
-                }
+        new Thread(() -> {
+            ConsoleProcessor consoleProcessor = new ConsoleProcessor();
+            while(true){
+                consoleProcessor.process(getInstance().getConsole().readLine("CMD: "));
             }
         }).start();
     }
