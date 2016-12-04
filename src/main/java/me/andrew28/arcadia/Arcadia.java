@@ -55,6 +55,9 @@ public class Arcadia {
             System.out.println("A rate limit error, please try again later (or not).");
             e.printStackTrace();
         }
+
+
+        //Start console when everything else is done
         getInstance().setConsole(System.console());
         new Thread(new Runnable() {
             @Override
