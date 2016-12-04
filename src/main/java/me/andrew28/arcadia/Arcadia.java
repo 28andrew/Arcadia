@@ -14,6 +14,7 @@ import java.io.Console;
 public class Arcadia {
 
     public static final String USAGE_MSG = "java -jar Arcadia.jar <TOKEN> <FLAGS>\nFlags:";
+    public static String PREFIX = "__";
     private static Arcadia instance;
 
     private String token, censoredToken;
@@ -55,7 +56,6 @@ public class Arcadia {
             System.out.println("A rate limit error, please try again later (or not).");
             e.printStackTrace();
         }
-
 
         //Start console when everything else is done
         getInstance().setConsole(System.console());
