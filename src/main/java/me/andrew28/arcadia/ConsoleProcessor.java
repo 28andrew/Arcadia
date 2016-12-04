@@ -1,5 +1,7 @@
 package me.andrew28.arcadia;
 
+import me.andrew28.arcadia.types.ConsoleColor;
+
 /**
  * Created by Andrew Tran on 12/3/2016
  */
@@ -9,20 +11,20 @@ public class ConsoleProcessor {
         if (split.length > 0){
             switch(split[0]){
                 case "help":
-                    System.out.println(String.join("\n", new String[]{
+                    Arcadia.log(ConsoleColor.YELLOW + String.join("\n", new String[]{
                             "Commands:",
                             "(token) || View token",
                             "(exit|shutdown|quit|stop) || Shutdown the bot"
                     }));
                     break;
                 case "token":
-                    System.out.println("Token: " + Arcadia.getInstance().getCensoredToken());
+                    Arcadia.log("Token: " + Arcadia.getInstance().getCensoredToken());
                     break;
                 case "exit":
                 case "shutdown":
                 case "quit":
                 case "stop":
-                    System.out.println("Shutting down..");
+                    Arcadia.log( ConsoleColor.PURPLE + "Shutting down..");
                     Arcadia.exit();
                     break;
             }

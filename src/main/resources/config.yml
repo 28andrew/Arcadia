@@ -1,0 +1,6 @@
+#Use DiscordPW statistics posting or not
+use-discordpw-stats: false
+#Update Frequency to post stats in seconds
+discordpw-update-frequency: 600
+#Token obtained from https://bots.discord.pw/api
+discordpw-auth: TOKENHERE

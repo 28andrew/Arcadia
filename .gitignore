@@ -4,3 +4,7 @@ Arcadia.iml
 
 #Maven
 target/
+
+#Bot start
+start.sh
+config.yml
