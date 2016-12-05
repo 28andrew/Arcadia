@@ -1,9 +1,9 @@
-package me.andrew28.arcadia.types;
+package me.andrew28.arcadia.types.commands;
 
+import me.andrew28.arcadia.types.ArcadiaConsumers;
+import me.andrew28.arcadia.types.commands.ICommand;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageEmbed;
-
-import java.util.function.Consumer;
 
 /**
  * Created by Andrew Tran on 12/3/2016

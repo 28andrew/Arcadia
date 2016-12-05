@@ -1,7 +1,7 @@
 package me.andrew28.arcadia.commands;
 
 import me.andrew28.arcadia.Arcadia;
-import me.andrew28.arcadia.types.RegexMatchCommand;
+import me.andrew28.arcadia.types.commands.RegexMatchCommand;
 import me.andrew28.arcadia.types.annotations.Command;
 import me.andrew28.arcadia.util.ImageUtil;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -9,7 +9,6 @@ import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.HttpURLConnection;

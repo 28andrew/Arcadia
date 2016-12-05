@@ -2,17 +2,15 @@ package me.andrew28.arcadia.commands;
 
 import me.andrew28.arcadia.Arcadia;
 import me.andrew28.arcadia.types.ArcadiaConsumers;
-import me.andrew28.arcadia.types.BotCommand;
-import me.andrew28.arcadia.types.ExactMatchCommand;
+import me.andrew28.arcadia.types.commands.BotCommand;
+import me.andrew28.arcadia.types.commands.ExactMatchCommand;
 import me.andrew28.arcadia.types.annotations.Command;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
-import java.util.function.Consumer;
 
 /**
  * Created by Andrew Tran on 12/4/2016

@@ -1,4 +1,4 @@
-package me.andrew28.arcadia.types;
+package me.andrew28.arcadia.types.commands;
 
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;

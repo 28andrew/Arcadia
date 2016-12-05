@@ -2,6 +2,9 @@ package me.andrew28.arcadia;
 
 import me.andrew28.arcadia.types.*;
 import me.andrew28.arcadia.types.annotations.Command;
+import me.andrew28.arcadia.types.commands.BotCommand;
+import me.andrew28.arcadia.types.commands.CommandType;
+import me.andrew28.arcadia.types.commands.ICommand;
 import me.andrew28.arcadia.util.ClassFinder;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -10,20 +13,14 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
-import net.dv8tion.jda.core.managers.AccountManager;
-import net.dv8tion.jda.core.requests.RestAction;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import javax.security.auth.login.LoginException;
 import java.io.*;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.security.CodeSource;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.regex.Pattern;
 
 /**
  * Created by Andrew Tran on 12/3/2016.

@@ -1,6 +1,6 @@
 package me.andrew28.arcadia.commands;
 
-import me.andrew28.arcadia.types.RegexMatchCommand;
+import me.andrew28.arcadia.types.commands.RegexMatchCommand;
 import me.andrew28.arcadia.types.annotations.Command;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;

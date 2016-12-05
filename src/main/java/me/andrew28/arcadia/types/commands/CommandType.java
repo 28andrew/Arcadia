@@ -1,4 +1,4 @@
-package me.andrew28.arcadia.types;
+package me.andrew28.arcadia.types.commands;
 
 /**
  * Created by Andrew Tran on 12/3/2016

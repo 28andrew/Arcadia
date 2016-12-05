@@ -1,4 +1,4 @@
-package me.andrew28.arcadia.types;
+package me.andrew28.arcadia.types.commands;
 
 import me.andrew28.arcadia.Arcadia;
 import me.andrew28.arcadia.types.annotations.Command;

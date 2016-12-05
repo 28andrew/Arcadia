@@ -1,9 +1,7 @@
 package me.andrew28.arcadia;
 
 import me.andrew28.arcadia.commands.Help;
-import me.andrew28.arcadia.types.BotCommand;
-import me.andrew28.arcadia.types.RegexMatchCommand;
-import me.andrew28.arcadia.types.annotations.Command;
+import me.andrew28.arcadia.types.commands.BotCommand;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
