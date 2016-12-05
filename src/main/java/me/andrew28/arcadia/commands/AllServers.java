@@ -1,37 +1,29 @@
 package me.andrew28.arcadia.commands;
 
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import me.andrew28.arcadia.Arcadia;
-import me.andrew28.arcadia.types.*;
+import me.andrew28.arcadia.types.RegexMatchCommand;
 import me.andrew28.arcadia.types.annotations.Command;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Created by Andrew Tran on 12/4/2016
  */
 @Command(command = "servers( detailed)?", usage = "servers[ detailed]", description = "Get all servers I am on.")
 public class AllServers extends RegexMatchCommand {
-    public static HashMap<String, Map.Entry<Long, GuildEmbed>> cachedGuildEmbeds = new HashMap<>();
+    public static HashMap<String, Map.Entry<Long, MessageEmbed>> cachedGuildEmbeds = new HashMap<>();
     @Override
     public void handle(User user, Message message, ChannelType channelType, MessageReceivedEvent event) {
         if (message.getStrippedContent().contains("detailed")){
-            ArrayList<GuildEmbed> embeds = new ArrayList<>();
+            ArrayList<MessageEmbed> embeds = new ArrayList<>();
             for (final Guild guild : Arcadia.getInstance().getJdaInstance().getGuilds()){
                 Boolean generate = true;
-                GuildEmbed embed = null;
+                MessageEmbed embed = null;
                 if (cachedGuildEmbeds.containsKey(guild.getId())){
                     if (System.currentTimeMillis() - cachedGuildEmbeds.get(guild.getId()).getKey() > 10000L/*10second cache*/){
                         generate = true;
@@ -41,26 +33,33 @@ public class AllServers extends RegexMatchCommand {
                     }
                 }
                 if(generate){
-                    embed = new GuildEmbed(guild);
+                    EmbedBuilder embedBuilder = new EmbedBuilder();
+                    if(guild.getIconUrl() != null){
+                        embedBuilder.setThumbnail(guild.getIconUrl());
+                    }
+                    embedBuilder.addField("Owner", guild.getOwner().getEffectiveName(), true);
+                    embedBuilder.addField("Member Count", String.valueOf(guild.getMembers().size()), true);
+                    embedBuilder.addField("Main Channel", "#" + guild.getPublicChannel().getName(), true);
+                    embed = embedBuilder.build();
                     final Long currentTime = System.currentTimeMillis();
-                    GuildEmbed finalEmbed = embed;
-                    cachedGuildEmbeds.put(guild.getId(), new Map.Entry<Long, GuildEmbed>() {
+                    MessageEmbed finalEmbed = embed;
+                    cachedGuildEmbeds.put(guild.getId(), new Map.Entry<Long, MessageEmbed>() {
 
 
                         private Long time = currentTime;
-                        private GuildEmbed embed = finalEmbed;
+                        private MessageEmbed embed = finalEmbed;
                         @Override
                         public Long getKey() {
                             return time;
                         }
 
                         @Override
-                        public GuildEmbed getValue() {
+                        public MessageEmbed getValue() {
                             return embed;
                         }
 
                         @Override
-                        public GuildEmbed setValue(GuildEmbed value) {
+                        public MessageEmbed setValue(MessageEmbed value) {
                             embed = value;
                             return embed;
                         }
@@ -82,7 +81,7 @@ public class AllServers extends RegexMatchCommand {
             new Thread("Send All Servers"){
                 @Override
                 public void run() {
-                    for (GuildEmbed embed : embeds){
+                    for (MessageEmbed embed : embeds){
                         reply(message, embed);
                         try {
                             sleep(200);
@@ -91,7 +90,12 @@ public class AllServers extends RegexMatchCommand {
                 }
             }.start();
         }else{
-            reply(message, new AllGuildsEmbed(Arcadia.getInstance().getJdaInstance()));
+            EmbedBuilder embedBuilder = new EmbedBuilder();
+            embedBuilder.setTitle("Servers:");
+            for (Guild guild : Arcadia.getInstance().getJdaInstance().getGuilds()){
+                embedBuilder.addField(guild.getName(), String.valueOf(guild.getMembers().size()), true);
+            }
+            reply(message, embedBuilder.build());
         }
     }
 }

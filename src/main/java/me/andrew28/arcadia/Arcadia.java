@@ -6,6 +6,9 @@ import me.andrew28.arcadia.util.ClassFinder;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.managers.AccountManager;
 import net.dv8tion.jda.core.requests.RestAction;
@@ -128,6 +131,17 @@ public class Arcadia {
                 consoleProcessor.process(getInstance().getConsole().readLine("CMD: "));
             }
         }).start();
+    }
+
+    public Role getRole(Guild guild){
+        for(Role role : guild.getRoles()){
+            for (Member member : guild.getMembersWithRoles(role)){
+                if (member.getUser().getId().equals(jdaInstance.getSelfUser().getId())){
+                    return role;
+                }
+            }
+        }
+        return null;
     }
 
     public String getBotUsername(){
