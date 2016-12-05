@@ -74,7 +74,7 @@ public class StatManager {
             post.setHeader("Authorization", (String) Arcadia.getInstance().getConfig().get("discordpw-auth"));
             post.setHeader("Content-Type","application/json");
 
-            post.setEntity(new StringEntity(String.format("{\"server_count\": %s}", 4))); //I'm not installing a JSON library
+            post.setEntity(new StringEntity(String.format("{\"server_count\": %s}", Arcadia.getInstance().getJdaInstance().getGuilds().size()))); //I'm not installing a JSON library
             HttpResponse response = client.execute(post);
             //
             System.out.println("bots.discord.pw RESPONSE CODE: " + response.getStatusLine().getStatusCode());

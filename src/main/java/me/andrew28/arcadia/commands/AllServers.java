@@ -3,10 +3,17 @@ package me.andrew28.arcadia.commands;
 import me.andrew28.arcadia.Arcadia;
 import me.andrew28.arcadia.types.RegexMatchCommand;
 import me.andrew28.arcadia.types.annotations.Command;
+import me.andrew28.arcadia.util.ImageUtil;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +32,7 @@ public class AllServers extends RegexMatchCommand {
                 Boolean generate = true;
                 MessageEmbed embed = null;
                 if (cachedGuildEmbeds.containsKey(guild.getId())){
-                    if (System.currentTimeMillis() - cachedGuildEmbeds.get(guild.getId()).getKey() > 10000L/*10second cache*/){
+                    if (System.currentTimeMillis() - cachedGuildEmbeds.get(guild.getId()).getKey() > 60000L/*60second cache*/){
                         generate = true;
                     }else{
                         generate = false;
@@ -36,6 +43,20 @@ public class AllServers extends RegexMatchCommand {
                     EmbedBuilder embedBuilder = new EmbedBuilder();
                     if(guild.getIconUrl() != null){
                         embedBuilder.setThumbnail(guild.getIconUrl());
+                        try{
+                            final URL url = new URL(guild.getIconUrl());
+                            final HttpURLConnection connection = (HttpURLConnection) url
+                                    .openConnection();
+                            connection.setRequestProperty(
+                                    "User-Agent",
+                                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
+                            BufferedImage icon = ImageIO.read(connection.getInputStream());
+                            embedBuilder.setColor(ImageUtil.commonColor(icon));
+                        }catch(IOException e){
+                            e.printStackTrace();
+                        }
+                    }else{
+                        embedBuilder.setColor(Arcadia.getInstance().getRole(message.getGuild()).getColor());
                     }
                     embedBuilder.addField("Owner", guild.getOwner().getEffectiveName(), true);
                     embedBuilder.addField("Member Count", String.valueOf(guild.getMembers().size()), true);
@@ -95,6 +116,7 @@ public class AllServers extends RegexMatchCommand {
             for (Guild guild : Arcadia.getInstance().getJdaInstance().getGuilds()){
                 embedBuilder.addField(guild.getName(), String.valueOf(guild.getMembers().size()), true);
             }
+            embedBuilder.setColor(Arcadia.getInstance().getRole(message.getGuild()).getColor());
             reply(message, embedBuilder.build());
         }
     }
