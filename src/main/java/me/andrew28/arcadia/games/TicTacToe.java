@@ -61,7 +61,7 @@ public class TicTacToe extends TurnBasedGame {
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setColor(Color.GREEN);
         embedBuilder.setTitle("Starting Tic Tac Toe");
-        embedBuilder.addField("Members: ", String.join(" ,", Arrays.stream(getParty()).map(userID -> Arcadia.getInstance().getJdaInstance().getUserById(userID).getAsMention()).collect(Collectors.toList())), true);
+        embedBuilder.addField("Members: ", String.join(", ", Arrays.stream(getParty()).map(userID -> Arcadia.getInstance().getJdaInstance().getUserById(userID).getAsMention()).collect(Collectors.toList())), true);
         embedBuilder.setThumbnail("https://i.imgur.com/8URln8V.png"); // http://i.imgur.com/8URln8V.png
         reply(embedBuilder.build());
         turnAction();

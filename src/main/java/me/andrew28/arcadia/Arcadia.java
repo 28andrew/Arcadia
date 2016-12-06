@@ -33,6 +33,7 @@ public class Arcadia {
     public static String PREFIX = "\\_\\_";
     public static File configFile = new File("./config.yml").getAbsoluteFile();
     public static Yaml yaml = new Yaml();
+    public static Timer timer = new Timer();
     public static StatManager statManager;
     private static Arcadia instance;
 
@@ -107,7 +108,7 @@ public class Arcadia {
 
         if ((Boolean) getInstance().getConfig().get("use-discordpw-stats")){
             statManager = new StatManager(getInstance().getJdaInstance());
-            new Timer().scheduleAtFixedRate(new TimerTask() {
+            timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
                     statManager.update(() -> getInstance().getJdaInstance().getGuilds().size());

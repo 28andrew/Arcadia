@@ -117,6 +117,18 @@ public class RequestManager {
             return true;
         }
 
+        public String[] getNotReady(){
+            ArrayList<String> opponents = new ArrayList<>(Arrays.asList(getParty()));
+            ArrayList<String> waitingOn = new ArrayList<>();
+            opponents.remove(getHost());
+            for (String member : opponents){
+                if (!accepted.contains(member)){
+                    waitingOn.add(member);
+                }
+            }
+            return waitingOn.toArray(new String[waitingOn.size()]);
+        }
+
         public String[] getParty() {
             return party;
         }

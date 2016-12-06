@@ -16,9 +16,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import java.awt.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
@@ -40,6 +38,8 @@ public class PlayGame extends RegexMatchCommand{
             reply(message, embedBuilder.build());
             return;
         }
+        Game infoGame = GameManager.newInstanceOfGame(GameManager.getGame(game), null, null); //Just to get info
+
         if (message.getMentionedUsers().size() == 0){
             return;
         }
@@ -68,21 +68,56 @@ public class PlayGame extends RegexMatchCommand{
             reply(message, "You already made a request for the members: " + String.join(" ", users));
             return;
         }
-        RequestManager.registerRequest(new RequestManager.Request(user.getId(), game, members.toArray(new String[members.size()])), new RequestManager.RequestHandler() {
-            @Override
-            public void ready(RequestManager.Request request) {
-                Game game = GameManager.newInstanceOfGame(GameManager.getGame(request.getGameName()), (TextChannel) message.getChannel(), members.toArray(new String[members.size()]));
-                ActiveGameManager.addGame(game);
-                game.start();
-            }
+        RequestManager.Request request = new RequestManager.Request(user.getId(), game, members.toArray(new String[members.size()]));
+        RequestManager.registerRequest(request, request1 -> {
+            Game game1 = GameManager.newInstanceOfGame(GameManager.getGame(request1.getGameName()), (TextChannel) message.getChannel(), members.toArray(new String[members.size()]));
+            ActiveGameManager.addGame(game1);
+            game1.start();
         });
+
+        Arcadia.timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (!request.ready()){
+                    for (String memberID : request.getNotReady()){
+                        User member = Arcadia.getInstance().getJdaInstance().getUserById(memberID);
+                        member.openPrivateChannel().queue(privateChannel -> {
+                            EmbedBuilder embedBuilder = new EmbedBuilder();
+                            embedBuilder.setTitle(game);
+                            embedBuilder.setAuthor(game, infoGame.getIconURL(), infoGame.getIconURL());
+                            embedBuilder.setColor(infoGame.getAccentColor());
+                            String others = "";
+                            if (request.getNotReady().length > 1){
+                                others = " and " + (request.getNotReady().length - 1) + " others";
+                            }
+                            embedBuilder.setDescription("The game is waiting on you" + others + "!");
+                            privateChannel.sendMessage(embedBuilder.build()).queue(ArcadiaConsumers.SUCCESS_MESSAGE, ArcadiaConsumers.ERROR);
+                        }, ArcadiaConsumers.ERROR);
+                    }
+                }
+            }
+        }, 45 * 1000L /*45 seconds*/);
+
+        Arcadia.timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (!request.ready()){
+                    EmbedBuilder embedBuilder = new EmbedBuilder();
+                    EmbedBuilderUtil.error(embedBuilder);
+                    embedBuilder.setDescription("Not all members have accepted the game request from " + user.getAsMention() + " within a minute.");
+                    embedBuilder.addField("Was waiting on: ", String.join(", ", Arrays.stream(request.getNotReady()).map(ID -> Arcadia.getInstance().getJdaInstance().getUserById(ID).getAsMention()).collect(Collectors.toList())), false);
+                    reply(message, embedBuilder.build());
+                }
+            }
+        }, 60 * 1000L /*60 seconds = 1 minute*/);
+
         Arcadia.log("Game " + game + " requested with players " + String.join(", ", members.stream().map(memberID -> Arcadia.getInstance().getJdaInstance().getUserById(memberID).getName()).collect(Collectors.toList())) + " on channel " + message.getChannel().getName() + " on server " + message.getGuild().getName());
-        Game infoGame = GameManager.newInstanceOfGame(GameManager.getGame(game), null, null); //Just to get info
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setAuthor("WORK IN PROGRESS " + game, infoGame.getIconURL(), infoGame.getIconURL());
         embedBuilder.setColor(infoGame.getAccentColor());
         embedBuilder.addField("Host", user.getAsMention(), false);
         embedBuilder.addField("Participants" + ((members.size() - 1) > 1 ? "s" : ""), String.join(", ", members.stream().map(memberID -> Arcadia.getInstance().getJdaInstance().getUserById(memberID).getAsMention()).collect(Collectors.toList())), false);
+        embedBuilder.addField("Expiration", "**1** minute", false);
         reply(message, embedBuilder.build());
 
         //
