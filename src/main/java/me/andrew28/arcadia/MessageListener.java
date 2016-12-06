@@ -2,10 +2,14 @@ package me.andrew28.arcadia;
 
 import me.andrew28.arcadia.commands.Help;
 import me.andrew28.arcadia.types.commands.BotCommand;
+import me.andrew28.arcadia.types.commands.RegexMatchCommand;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Andrew Tran on 12/3/2016
@@ -59,7 +63,11 @@ public class MessageListener extends ListenerAdapter{
                     if (botCommand.usesPrefix()){
                         regex = regex.replace(Arcadia.PREFIX, Arcadia.PREFIX.replace("\\","\\\\"));
                     }
-                    if(message.matches(regex)){
+                    Pattern pattern = Pattern.compile(regex);
+                    Matcher matcher = pattern.matcher(message);
+                    if(matcher.matches()){
+                        RegexMatchCommand regexMatchCommand = (RegexMatchCommand) botCommand.getCommandClass();
+                        regexMatchCommand.saveMatchedGroups(matcher);
                         handle(botCommand, event);
                     }
                     break;

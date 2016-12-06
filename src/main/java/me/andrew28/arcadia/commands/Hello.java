@@ -18,4 +18,5 @@ public class Hello extends RegexMatchCommand{
         reply(message, "Hello " + user.getAsMention() + "!");
         //System.out.println("Hello " + user.getAsMention() + "!");
     }
+
 }

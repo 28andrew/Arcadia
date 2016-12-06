@@ -1,10 +1,12 @@
 package me.andrew28.arcadia;
 
+import me.andrew28.arcadia.games.GameManager;
 import me.andrew28.arcadia.types.*;
 import me.andrew28.arcadia.types.annotations.Command;
 import me.andrew28.arcadia.types.commands.BotCommand;
 import me.andrew28.arcadia.types.commands.CommandType;
 import me.andrew28.arcadia.types.commands.ICommand;
+import me.andrew28.arcadia.types.games.TurnBasedGame;
 import me.andrew28.arcadia.util.ClassFinder;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -48,7 +50,6 @@ public class Arcadia {
     public static void main(String[] args){
         instance = new Arcadia();
         getInstance().setArguments(new ArrayList<>(Arrays.asList(args)));
-
         //CONFIG
         if (!configFile.exists()){
             InputStream inputStream = Arcadia.class.getResourceAsStream("/config.yml");
@@ -99,6 +100,9 @@ public class Arcadia {
             log(ConsoleColor.RED + "A rate limit error, please try again later (or not).");
             e.printStackTrace();
         }
+
+
+        GameManager.init();
 
 
         if ((Boolean) getInstance().getConfig().get("use-discordpw-stats")){
