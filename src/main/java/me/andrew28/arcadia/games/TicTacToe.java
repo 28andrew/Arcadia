@@ -71,6 +71,9 @@ public class TicTacToe extends TurnBasedGame {
     public void turnAction() {
         String currentRole = getCurrentRole();
         User currentUser = users.get(currentRole);
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        embedBuilder.setTitle(currentUser.getAsMention() + "'s Turn!");
+        embedBuilder.setThumbnail(currentUser.getAvatarUrl());
 
         nextTurn();
     }
