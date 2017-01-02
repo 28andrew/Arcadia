@@ -1,1 +1,0 @@
-java -jar target/Arcadia.jar MjU0Nzc4NjY0NDkzNzc2ODk2.CyUbnw.bM3oFIqaN5ZwXnL938bV2skMCss -nocolor
